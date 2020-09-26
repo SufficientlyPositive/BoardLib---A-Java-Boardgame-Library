@@ -1,23 +1,39 @@
-import java.awt.*;
 
 /**
  *   Class, for holding board pieces, should include the following functions:
  *      placePiece
  */
+
 public class Tile {
+    Piece piece;
+
     public Tile(){
-        Piece piece = new Piece();
+        Piece piece = new NullPiece();
     }
 
-    public boolean placePiece(){
-        return true;
+    public boolean placePiece(boolean move){
+        try{
+            this.piece = new Knight();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public boolean removePiece(){
-        return true;
+        try{
+            this.piece = new NullPiece();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public boolean hasPiece(){
-        return true;
+        if(this.piece.getID() == "null"){
+            return false;
+        }else{
+            return true;
+        }
     }
 }
