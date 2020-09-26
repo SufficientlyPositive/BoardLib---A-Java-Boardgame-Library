@@ -44,11 +44,9 @@ public class Board {
      * @param y - the y coordinate on the board (which column to check)
      * @return - whether there is a piece at [x][y]
      */
-    public static boolean isPiece(int x, int y) {
+    public boolean isPiece(int x, int y) {
 
-        //return getTileAt(x-1, y-1).hasPiece;
-
-        return false;
+        return getTileAt(x-1, y-1).hasPiece;
     }
 
     /**
