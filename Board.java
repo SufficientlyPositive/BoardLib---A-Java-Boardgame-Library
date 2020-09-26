@@ -6,25 +6,28 @@
  * isPiece(*some coordinates*) return boolean
  * euclideanDistance(*some coordinates*, *some coordinates*) return integer
  * validMove(*some coordinates*, *some coordinates*) return boolean
+ * onBoard(*some coordinates*)
  * getTileAt(*some coordinates*) return Tile
- * createBoard(*some array of tiles?*)
- * createCheckerBoard(integer, integer)
+ * createBoard(*some array of tiles?*) - constructor
+ * createCheckerBoard(integer, integer) - constructor v2
  * printBoard()
  */
 
 public class Board {
 
-    /**
-     * Tile array from which to access the board tiles.
-     */
     private Tile[][] boardTiles;
+    private int boardWidth;
+    private int boardHeight;
 
     /**
      * Defaults to 8x8 board (change method later?)
      */
     public Board() {
 
-        this.boardTiles = new Tile[8][8];
+        this.boardHeight = 8;
+        this.boardWidth = 8;
+
+        this.boardTiles = new Tile[boardHeight][boardWidth];
 
         for(int i = 0; i < 8; i++) {
             for(int j = 0; i < 8; i++) {
