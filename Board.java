@@ -1,3 +1,4 @@
+
 /**
  * Class, for holding tile instances, should include the following functions:
  * 
@@ -12,5 +13,11 @@
  */
 
 public class Board {
+
+    private Tile[] boardTiles;
+
+    public Board() {
+
+    }
 
 }
