@@ -1,3 +1,5 @@
+import java.lang.StringBuilder;
+
 
 /**
  * Class, for holding tile instances, should include the following functions:
@@ -22,6 +24,7 @@ public class Board {
 
     /**
      * Defaults to 8x8 board (change method later?)
+     * Has knights on first row and back row
      */
     public Board() {
 
@@ -31,12 +34,47 @@ public class Board {
 
         this.boardTiles = new Tile[boardHeight][boardWidth];
 
-        for(int i = 0; i < 8; i++) {
-            for(int j = 0; i < 8; i++) {
+        for(int i = 0; i < this.boardHeight; i++) {
+            for(int j = 0; j < this.boardWidth; j++) {
                 this.boardTiles[i][j] = new Tile();
             }
         }
+
+        for(int j = 0; j < boardHeight; j+=(boardHeight-1)) {
+            for(int i = 0; i < boardWidth; i++) {
+                this.boardTiles[j][i].placePiece();
+            }
+        }
     }
+
+    /**
+     * printBoard puts the board into console with the least fuss possible
+     * only prints 1 letter per tile/piece
+     */
+    public void printBoard() {
+        StringBuilder printStr = new StringBuilder();
+
+        String non = "_";
+        String Id;
+
+        for(Tile[] tileArr : this.boardTiles) {
+            for(Tile tile : tileArr) {
+
+                Id = tile.piece.getID();
+
+                if(!Id.equals("null")) {
+                    printStr.append(Id);
+                } else {
+                    printStr.append(non);
+                }
+            }
+            printStr.append("\n");
+        }
+
+        System.out.print(printStr);
+    }
+
+
 
     /**
      * isPiece returns whether a piece is at a certain point in the board,
@@ -51,7 +89,7 @@ public class Board {
     }
 
     /**
-     * move just moves a piece from one place to the next, it does not check if it is a valid move!
+     * move just moves a piece from one place to the next, it does not check if it is a valid move, only if the move is within board boundaries
      * 
      * @param originX x position of the piece
      * @param originY y position of the piece
@@ -60,8 +98,8 @@ public class Board {
      */
     public void move(int originX, int originY, int destX, int destY) {
         if(onBoard(originX, originY) && onBoard(destX, destY)) {
-            this.boardTiles[destX][destY].piece = this.boardTiles[originX][originY].piece;
-            this.boardTiles[originX][originY].removePiece();
+            this.boardTiles[destX-1][destY-1].placePiece();
+            this.boardTiles[originX-1][originY-1].removePiece();
         }
     }
 
@@ -92,4 +130,13 @@ public class Board {
         }
         return true;
     }
+
+    public static void main(String[] arr) {
+        Board board = new Board();
+        board.printBoard();
+
+        board.move(8,1,6,1);
+        board.printBoard();
+    }
+
 }

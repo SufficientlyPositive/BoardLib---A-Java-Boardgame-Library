@@ -8,10 +8,10 @@ public class Tile {
     Piece piece;
 
     public Tile(){
-        Piece piece = new NullPiece();
+        this.piece = new NullPiece();
     }
 
-    public boolean placePiece(boolean move){
+    public boolean placePiece(){
         try{
             this.piece = new Knight();
             return true;
@@ -35,5 +35,9 @@ public class Tile {
         }else{
             return true;
         }
+    }
+
+    public Piece getPiece(){
+        return this.piece;
     }
 }
