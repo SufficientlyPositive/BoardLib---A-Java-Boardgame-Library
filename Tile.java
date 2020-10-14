@@ -1,43 +1,29 @@
-
-/**
- *   Class, for holding board pieces, should include the following functions:
- *      placePiece
- */
-
 public class Tile {
-    Piece piece;
 
-    public Tile(){
-        this.piece = new NullPiece();
+    public final String name;
+    public final String colourID;
+
+    /**
+     * Tile() - constructor for a default "null" tile. It has a black background by default.
+     * Board objects initialise with a board of default tiles.
+     */
+    protected Tile() {
+
+        this.name = "nullTile";
+        this.colourID = ConsoleColours.BLACK_BACKGROUND;
+
     }
 
-    public boolean placePiece(){
-        try{
-            this.piece = new Knight();
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
+    /**
+     * Tile() - constructor for a more customisable tile.
+     * 
+     * @param name - the name parameter, for identifying the tile in any game logic.
+     * @param colourID - the ANSI colour code for printing colour to console.
+     */
+    public Tile(String name, String colourID) {
 
-    public boolean removePiece(){
-        try{
-            this.piece = new NullPiece();
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
+        this.name = name;
+        this.colourID = colourID;
 
-    public boolean hasPiece(){
-        if(this.piece.getID() == "null"){
-            return false;
-        }else{
-            return true;
-        }
-    }
-
-    public Piece getPiece(){
-        return this.piece;
     }
 }

@@ -1,142 +1,124 @@
-import java.lang.StringBuilder;
-
-
-/**
- * Class, for holding tile instances, should include the following functions:
- * 
- * move(*some coordinates*, *some coordinates*)
- * isPiece(*some coordinates*) return boolean
- * euclideanDistance(*some coordinates*, *some coordinates*) return integer
- * validMove(*some coordinates*, *some coordinates*) return boolean
- * onBoard(*some coordinates*)
- * getTileAt(*some coordinates*) return Tile
- * createBoard(*some array of tiles?*) - constructor
- * createCheckerBoard(integer, integer) - constructor v2
- * printBoard()
- */
-
 public class Board {
+    
+    private Piece[][] pieceBoard;
+    private Tile[][] tileBoard;
+    
+    private String labels;
 
-    private Tile[][] boardTiles;
-    private int boardWidth;
-    private int boardHeight;
-    private boolean looping;
+    public final int height;
+    public final int width;
 
-    /**
-     * Defaults to 8x8 board (change method later?)
-     * Has knights on first row and back row
-     */
-    public Board() {
+    public Board(int height, int width) {
 
-        this.boardHeight = 8;
-        this.boardWidth = 8;
-        this.looping = false;
+        this.height = height;
+        this.width = width;
+        this.pieceBoard = new Piece[height][width];
+        this.tileBoard = new Tile[height][width];
 
-        this.boardTiles = new Tile[boardHeight][boardWidth];
-
-        for(int i = 0; i < this.boardHeight; i++) {
-            for(int j = 0; j < this.boardWidth; j++) {
-                this.boardTiles[i][j] = new Tile();
-            }
-        }
-
-        for(int j = 0; j < boardHeight; j+=(boardHeight-1)) {
-            for(int i = 0; i < boardWidth; i++) {
-                this.boardTiles[j][i].placePiece();
-            }
-        }
+        this.initBoard();
+        this.createLabels();
     }
 
-    /**
-     * printBoard puts the board into console with the least fuss possible
-     * only prints 1 letter per tile/piece
-     */
+    //print board to console
     public void printBoard() {
-        StringBuilder printStr = new StringBuilder();
 
-        String non = "_";
-        String Id;
+        StringBuilder toPrint = new StringBuilder();
 
-        for(Tile[] tileArr : this.boardTiles) {
-            for(Tile tile : tileArr) {
+        toPrint.append(this.labels);
 
-                Id = tile.piece.getID();
+        for(int i = 0; i < height; i++) {
+            toPrint.append(" ").append(i+1).append(" ");
 
-                if(!Id.equals("null")) {
-                    printStr.append(Id);
-                } else {
-                    printStr.append(non);
-                }
+            for(int j = 0; j < width; j++) {
+                toPrint.append(this.pieceBoard[i][j].prnt);
+                toPrint.append(" ");
             }
-            printStr.append("\n");
+
+            toPrint.append(i+1).append("\n");
         }
 
-        System.out.print(printStr);
+        toPrint.append(this.labels).append("\n");
+
+        System.out.println(toPrint);
+    }
+
+    //print board with colour
+    public void printBoardC() {
+        StringBuilder toPrint = new StringBuilder();
+
+        toPrint.append(this.labels);
+
+        for(int i = 0; i < height; i++) {
+            toPrint.append(" ").append(i+1).append(" ");
+
+            for(int j = 0; j < width; j++) {
+                Piece piece = getPieceAt(i,j);
+                toPrint.append(this.tileBoard[i][j].colourID).append(piece.colourID).append(piece.prnt).append(ConsoleColours.RESET);
+                toPrint.append(" ");
+            }
+
+            toPrint.append(i+1).append("\n");
+        }
+
+        toPrint.append(this.labels).append("\n");
+
+        System.out.println(toPrint);
     }
 
 
-
-    /**
-     * isPiece returns whether a piece is at a certain point in the board,
-     * Board coordinates start from 1.
-     * 
-     * @param x - the x coordinate on the board (which row to check)
-     * @param y - the y coordinate on the board (which column to check)
-     * @return - whether there is a piece at [x][y]
-     */
-    public boolean isPiece(int x, int y) {
-        return getTileAt(x-1, y-1).hasPiece();
+    public Piece[][] getPieces() {
+        return this.pieceBoard.clone();
     }
 
-    /**
-     * move just moves a piece from one place to the next, it does not check if it is a valid move, only if the move is within board boundaries
-     * 
-     * @param originX x position of the piece
-     * @param originY y position of the piece
-     * @param destX x position of the movement
-     * @param destY y position of the movement
-     */
-    public void move(int originX, int originY, int destX, int destY) {
-        if(onBoard(originX, originY) && onBoard(destX, destY)) {
-            this.boardTiles[destX-1][destY-1].placePiece();
-            this.boardTiles[originX-1][originY-1].removePiece();
+    public Piece getPieceAt(int row, int col) {
+        return this.pieceBoard[row][col];
+    }
+
+    public Tile[][] getTiles() {
+        return this.tileBoard.clone();
+    }
+
+    public Tile getTileAt(int row, int col) {
+        return this.tileBoard[row][col];
+    }
+
+    //should place new instance of piece
+    public void placePiece(Piece piece, int row, int col) {
+        this.pieceBoard[row][col] = piece;
+    }
+
+    public void removePiece(int row, int col) {
+        this.pieceBoard[row][col] = new Piece();
+    }
+
+    public void placeTile(Tile tile, int row, int col) {
+        this.tileBoard[row][col] = tile;
+    }
+
+    public void removeTile(int row, int col) {
+        this.tileBoard[row][col] = new Tile();
+    }
+
+    //initialises the board with the default null tiles & pieces
+    private void initBoard() {
+        for(int i = 0; i < this.height; i++) {
+            for(int j = 0; j < width; j++) {
+                pieceBoard[i][j] = new Piece();
+                tileBoard[i][j] = new Tile();
+            }
         }
     }
 
-    /**
-     * getTileAt gives the Tile object at a specific coordinate.
-     * 
-     * @param x - which row to look in
-     * @param y - which column to look in
-     * @return - the Tile object at x, y.
-     */
-    private Tile getTileAt(int x, int y) {
-        return this.boardTiles[x][y];
-    }
-
-    /**
-     * onBoard gets given a coordinate and returns whether the coordinate is on the board
-     * 
-     * @param x - the height of the given coordinate (which row is it in).
-     * @param y - how far along the row the piece is.
-     * @return - whether the coordinate is valid.
-     */
-    private boolean onBoard(int x, int y) {
-        if(!this.looping) {
-            return x <= boardHeight &&
-                   x > 0            &&
-                   y <= boardWidth  &&
-                   y > 0;
+    //creates the first line of the printable board, this only has to be done once
+    private void createLabels() {
+        StringBuilder str = new StringBuilder();
+        str.append("   ");
+        for(int i = 1; i < width + 1; i++) {
+            str.append(i).append(" ");
         }
-        return true;
-    }
+        str.append("\n");
 
-    public static void main(String[] arr) {
-        Board board = new Board();
-        board.printBoard();
-
-        board.move(8,1,6,1);
-        board.printBoard();
+        this.labels = str.toString();
     }
 
 }
