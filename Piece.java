@@ -18,7 +18,7 @@ public class Piece {
      * Piece() - constructor for default "null" piece, has white text colour by default.
      * Board objects initialise with a board full of default pieces
      */
-    public Piece() {
+    protected Piece() {
 
         this.player = 0;
         this.name = "nullPiece";

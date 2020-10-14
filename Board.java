@@ -10,6 +10,10 @@ public class Board {
 
     public Board(int height, int width) {
 
+        if(height < 1 || width < 1) {
+            throw new IllegalArgumentException("Board cannot have a height or width of below 1.");
+        }
+
         this.height = height;
         this.width = width;
         this.pieceBoard = new Piece[height][width];
